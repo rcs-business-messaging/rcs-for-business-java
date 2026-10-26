@@ -18,7 +18,7 @@ the following to you `pom.xml`:
 <dependency>
   <groupId>com.google.rbm</groupId>
   <artifactId>businesscommunications</artifactId>
-  <version>1.0.8</version>
+  <version>1.0.9</version>
 </dependency>
 ```
 
@@ -34,6 +34,10 @@ mvn install
 ```
 
 ## Change log
+
+1.0.9
+
+-   Added verification document upload flow to management samples.
 
 1.0.8
 

@@ -200,6 +200,25 @@ public class ManagementFlow {
       return;
     }
 
+    // Upload verification document.
+    if (getBooleanFlag("upload_verification_document")) {
+      String pdfPath = flags.get("pdf_path");
+      String source = flags.getOrDefault("attachment_source", "VERIFICATION_PAGE");
+      if (isNotBlank(pdfPath)) {
+        logger.info("Uploading verification document from path: " + pdfPath);
+        com.google.api.services.businesscommunications.v1.model.GoogleCommunicationsBusinesscommunicationsV1Attachment attachment =
+            api.uploadVerificationDocument(flags.get("agent_id"), pdfPath, source);
+        logger.info("Upload success! Created attachment details:");
+        logger.info("Name: " + attachment.getName());
+        logger.info("GcsUrl: " + attachment.getGcsUrl());
+        logger.info("ContentType: " + attachment.getContentType());
+        logger.info("SizeBytes: " + attachment.getSizeBytes());
+      } else {
+        logger.severe("pdf_path is required for upload_verification_document");
+      }
+      return;
+    }
+
     Agent agent = api.getAgent(flags.get("agent_id"));
     logger.info("Agent: " + agent);
 

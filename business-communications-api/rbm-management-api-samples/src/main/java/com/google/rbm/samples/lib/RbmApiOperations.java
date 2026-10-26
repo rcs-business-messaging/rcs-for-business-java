@@ -387,6 +387,30 @@ public final class RbmApiOperations {
     return updatedVerification;
   }
 
+  /**
+   * Uploads verification document (PDF) for an agent.
+   */
+  public com.google.api.services.businesscommunications.v1.model.GoogleCommunicationsBusinesscommunicationsV1Attachment uploadVerificationDocument(
+      String agentId, String pdfPath, String source) throws IOException {
+    checkAgentId(agentId);
+    File file = new File(pdfPath);
+    if (!file.exists()) {
+      throw new FileNotFoundException("PDF file not found at: " + pdfPath);
+    }
+
+    com.google.api.client.http.InputStreamContent mediaContent =
+        new com.google.api.client.http.InputStreamContent("application/pdf", new FileInputStream(file));
+    mediaContent.setLength(file.length());
+
+    com.google.api.services.businesscommunications.v1.BusinessCommunications.Brands.Agents.Attachments.Create createRequest =
+        bcBuilder.build().brands().agents().attachments()
+            .create(agentId, null, mediaContent)
+            .setAttachmentOperationSource(source);
+
+    createRequest.getMediaHttpUploader().setDirectUploadEnabled(true);
+    return createRequest.execute();
+  }
+
   // Agent launches RPCs.
 
   /**
